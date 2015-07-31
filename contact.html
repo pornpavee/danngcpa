@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+daniel cpa
+</title>
+ <link rel="stylesheet" href="css/styles.css">
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script type="text/javascript">
+		$(document).ready(function(){
+		$('li').mouseenter(function(){
+		$(this).find('ul>li').stop().fadeIn();
+
+		  });
+		$('li').mouseleave(function(){
+		$(this).find('ul>li').fadeOut();
+
+		})
+		});
+		
+		$(document).ready(function(){
+	   var errors = false;
+    $('.required').parent().find('.input').on('blur', function() {
+        var error_div = $(this).parent().find('.error_message');
+        var field_container = $(this).parent();
+        if (!$.empty_field_validation($(this).val())) {
+            error_div.html('This field is required.');
+            error_div.css('display', 'block');
+            field_container.addClass('error');
+			errors = true;
+        } else {
+            error_div.html('');
+            error_div.css('display', 'none');
+            field_container.removeClass('error');
+			errors = false;
+        }
+    });
+    $('#email').on('blur', function(){
+        var error_div = $(this).parent().find('.error_message');
+        var field_container = $(this).parent();
+        if (!$.email_validation($(this).val())) {
+            error_div.html('Expected Input: email');
+            error_div.css('display', 'block');
+            field_container.addClass('error');
+			errors = true;
+        } else {
+            error_div.html('');
+            error_div.css('display', 'none');
+            field_container.removeClass('error');
+			errors = false;
+        }
+    });
+	$('#contact_form').submit(function(event) {
+		event.preventDefault();
+		 $('.required').parent().find('.input').trigger('blur');
+        if (!errors)
+            $.ajax({
+                url: '/echo/json/',
+                data: {
+                    json: JSON.stringify($(this).serializeObject())
+                },
+                type: 'post',
+                success: function(data) {
+                    var message = 'Hi '+data.name+'. Your message was sent and received.';
+                    $('#after_submit').html(message);
+                    $('#after_submit').css('display', 'block');
+                },
+                error: function() {
+                    var message = 'Hi '+data.name+'. Your message could not be sent or received. Please try again later';
+                    $('#after_submit').html(message);
+                    $('#after_submit').css('display', 'block'); 
+                }
+            });
+		else
+			alert("You didn't completed the form correctly. Check it out and try again!");
+	});
+});
+
+$.empty_field_validation = function(field_value) {
+    if (field_value.trim() == '') return false;
+    return true;
+}
+    
+$.email_validation = function(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+}
+$.fn.serializeObject = function()
+{
+   var o = {};
+   var a = this.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
+      function initialize() {
+        var mapOptions = {
+          center: { lat: -34.397, lng: 150.644},
+          zoom: 8
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+</head>
+<body>
+<div class="divTableMain">
+             <nav>
+              <ul>
+              <li><a href="home.html"><img src="images/home.gif"/></a></li>
+              <li><a href="services.html"><img src="images/services.gif"/></a>
+                <ul>
+                <li><a href="#business">Business Services</a></li>
+                <li><a href="#acct_services">Accounting Services</a></li>
+                <li><a href="#tax_prep">Tax Preparation</a></li>
+                <li><a href="#audit">Auditing</a></li>
+                <li><a href="finance_planning">Financial Planning </a></li>  
+                
+                
+                </ul>
+                
+                </li>
+               
+               <li><img src="images/TaxCenter.gif"/>
+                <ul>
+               <li><a href="taxrate.html">Tax Rates</a></li>
+               <li><a href="taxcenter.html">Tax Calendar</a></li>
+               
+               </ul>
+               
+               </li>
+                <li><a href="about.html"><img src="images/about.gif"/></a></li>
+                <li><a href="contact.html"><img src="images/contact.gif"/></a></li>
+             </ul>
+ </nav> 
+ </div>
+ <div style="float:left">
+  <div class="divTableCon"> 
+    
+        
+                <div class="divHead">Contact Us </div>
+               
+                 <div class="divRow">
+                <div class="divCellContact">
+                <b>Address: </b><p>
+                90 Bowery Suite #308 <br>
+                New York, NY 10013 <BR>
+                Tel. 212-226-2471 <br>
+                Fax. 212-227-2229<br>
+  </div> 
+
+  </div>
+  </div>
+   <div class="divTableCon">                
+                <div class="divHead">&nbsp; </div>
+                 <div class="divRow">
+                 
+                <div class="divCellContact">
+                <b>Office Hours </b><p>
+              Mon-Fri: 9.00 a.m. - 6.00 p.m.<br>
+              Sat: 10.00 a.m. - 5.00 p.m.
+  </div> 
+
+  </div>
+  </div>
+  
+  
+   <div class="divTableCon"> 
+      <div class="divRow">  
+       <div class="divCell">      
+                <script src='https://maps.googleapis.com/maps/api/js?v=3.exp'></script>
+<div style='overflow:hidden;height:327px;width:432px;'><div id='gmap_canvas' style='height:327px;width:432px;'></div>
+<style>#gmap_canvas img{max-width:none!important;background:none!important}</style></div>
+ <a href='http://www.maps-generator.com'>www.Maps-Generator</a> <script type='text/javascript' src='http://embedmaps.com/google-maps-authorization/script.js?id=c96bd6d7b06b0415b42959fcf0f75156d32d29ca'></script><script type='text/javascript'> function init_map(){
+var myOptions = {
+zoom:12,center:new google.maps.LatLng(40.71751099999999,-73.99566600000003),
+mapTypeId: google.maps.MapTypeId.ROADMAP};
+map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);
+marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(40.71751099999999,-73.99566600000003)});
+infowindow = new google.maps.InfoWindow({
+content:'<strong>Daniel Ng, PLLC</strong><br>'+
+'90 Bowery #308<br>'+
+'10013 New York<br>' + ' <a itemprop="hasMap" href="https://www.google.com/maps/place/90+Bowery,+New+York,+NY+10013/@40.717511,-73.995666,17z/data=!3m1!4b1!4m2!3m1!1s0x89c259881d003827:0xa189da8a373d607">Get Directions</a>'
+});
+google.maps.event.addListener(marker, 'click', function(){
+infowindow.open(map,marker);
+});
+infowindow.open(map,marker);
+}
+google.maps.event.addDomListener(window, 'load', init_map);
+</script>
+              
+             </div></div></div>
+       
+				
+ <section>
+           <div class="divHead">Write a Message </div><p>
+           If you have any questions, please do not hesitate to send us a message. We reply within 24 hours !</p>
+         
+            
+            
+<form id="contact_form" action="submit.php" method="POST" enctype="multipart/form-data">
+
+    <label class="required" for="name">Your name:</label><br />
+    <input id="first_name" class="input" name="first_name" type="text" value="" size="30" /><br />
+    <span id="name_validation" class="error_message"></span>
+ 
+ 
+    <label class="required" for="email">Your email:</label><br />
+    <input id="email" class="input" name="email" type="text" value="" size="30" /><br />
+    <span id="email_validation" class="error_message"></span>
+  
+    <label class="required" for="message">Your message:</label><br />
+    <textarea id="message" class="input" name="message" rows="7" cols="30"></textarea><br />
+    <span id="message_validation" class="error_message"></span>
+ 
+    
+    <input id="submit_button" type="submit" value="Send email" />
+</form>
+        
+     
+      </section>
+      
+
+</body>
+</html>
